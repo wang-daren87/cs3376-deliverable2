@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
 using namespace std;
@@ -81,10 +83,11 @@ void dostuff(int sock, struct sockaddr_in cli_addr, socklen_t clilen, int sock2,
 	//Format message to log_s
 	strcat(fmt_msg, "\"");
 	strcat(fmt_msg, buffer2);
-	strcat(fmt_msg, "\" was received from "):
+	fmt_msg[strlen(fmt_msg) -1] = '\0';
+	strcat(fmt_msg, "\" was received from ");
 	strcat(fmt_msg, client_ip);
 	strcat(fmt_msg, "\n");
-	n2 = sendto(sock3,buffer2,255,0, (struct sockaddr *) &log_addr,sizeof(log_addr));
+	n2 = sendto(sock3,fmt_msg,255,0, (struct sockaddr *) &log_addr,sizeof(log_addr));
 	//Check for errors in reading from socket
 	if (n2 < 0)
 		error("ERROR recvfrom");
